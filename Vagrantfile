@@ -8,6 +8,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network :private_network, ip: "10.10.0.2"
 
+  config.vm.hostname = "modsecurity.charlymps.com"
 
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "provision.yml"
