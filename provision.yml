@@ -2,6 +2,8 @@
 - hosts: all
   sudo: true
   tasks:
+    - name: Install Vim
+      yum: name=vim state=latest
     - name: Install apache
       yum: name=httpd state=latest
     - name: Install binary modsecurity
