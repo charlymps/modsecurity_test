@@ -1,0 +1,15 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+    - name: Install apache
+      yum: name={{ item  }} state=latest
+      with_items:
+        - httpd
+        - gcc
+        - httpd-devel
+        - libxml2
+        - pcre-devel
+        - libxml2-devel
+        - curl-devel
+        - git

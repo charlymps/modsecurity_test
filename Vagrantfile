@@ -8,4 +8,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network :private_network, ip: "10.10.0.2"
 
+
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "provision.yml"
+
+    # This is required because to prevent Host key checking errors when the vagrant machine is recreated with another key
+    ansible.host_key_checking = false
+  end
+
 end
