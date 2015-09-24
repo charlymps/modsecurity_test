@@ -12,12 +12,22 @@
     - name: Copy apache configuration file
       copy: src=httpd.conf dest=/etc/httpd/conf/httpd.conf
     - name: Copy modsecurity configuration file
-      copy: src=mod_security.conf dest=/etc/httpd/conf.d/modsecurity.conf
+      copy: src=mod_security.conf dest=/etc/httpd/conf.d/mod_security.conf
     - name: Copy virtual hosts configuration
       copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
       with_items:
         - site1.conf
-        - site2.conf 
+        - site2.conf
+    - name: Create DocumentRoot for virtual hosts
+      file: path=/var/www/{{ item }} state=directory
+      with_items:
+        - site1
+        - site2
+    - name: Create index.html for sites
+      copy: content="This is {{ item }}" dest=/var/www/{{ item }}/index.html
+      with_items:
+        - site1
+        - site2
     - name: Clone modsecurity OWASP core rules repository
       git: repo=https://github.com/SpiderLabs/owasp-modsecurity-crs.git dest=/etc/httpd/owasp-modsecurity-crs update=no
     - name: Configure OWASP core rules (configuration file)
