@@ -18,6 +18,19 @@
     - name: Creates GeoIPISP.dat
       command: /bin/cp /usr/share/GeoIP/GeoIPASNum.dat /usr/share/GeoIP/GeoIPISP.dat creates=/usr/share/GeoIP/GeoIPISP.dat
     - name: Download waffle
-      get_url: url=http://waf-fle.org/downloads/waf-fle_0.6.4.tar.gz dest=/usr/local
+      get_url: url=http://waf-fle.org/downloads/waf-fle_0.6.4.tar.gz dest=/tmp
     - name: Uncompresses waffle
-      command: /bin/tar -xzf /usr/local/waf-fle_0.6.4.tar.gz
+      command: /bin/tar -xzf /tmp/waf-fle_0.6.4.tar.gz --directory=/usr/local
+    - name: Link to the app directory
+      file: src=/usr/local/waf-fle_0.6.4 dest=/usr/local/waf-fle state=link
+    - name: Copy waffle apache configuration
+      copy: src=waf-fle.conf dest=/etc/httpd/conf.d/waf-fle.conf 
+    - name: Copy waffle configuration
+      copy: src=config.php.waffle dest=/usr/local/waf-fle/config.php
+    - name: Start services
+      service: name={{ item }} state=started
+      with_items:
+        - httpd
+        - mysqld
+    - name: Set mysql password 1
+      command: /usr/bin/mysqladmin -u root password 'waffle'

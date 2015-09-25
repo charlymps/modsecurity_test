@@ -55,4 +55,6 @@
         - modsecurity_crs_49_inbound_blocking.conf
         - modsecurity_crs_50_outbound.conf
         - modsecurity_crs_59_outbound_blocking.conf
-        - modsecurity_crs_60_correlation.conf 
+        - modsecurity_crs_60_correlation.conf
+    - name: Start Apache
+      service: name=httpd state=started
