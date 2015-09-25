@@ -1,0 +1,23 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+    - name: Install binaries
+      yum: name={{ item }} state=latest
+      with_items:
+        - vim
+        - httpd
+        - mysql-server
+        - php
+        - php-pdo
+        - php-mysql
+        - php-pecl-apc
+        - php-pecl-geoip
+        - GeoIP
+        - wget
+    - name: Creates GeoIPISP.dat
+      command: /bin/cp /usr/share/GeoIP/GeoIPASNum.dat /usr/share/GeoIP/GeoIPISP.dat creates=/usr/share/GeoIP/GeoIPISP.dat
+    - name: Download waffle
+      get_url: url=http://waf-fle.org/downloads/waf-fle_0.6.4.tar.gz dest=/usr/local
+    - name: Uncompresses waffle
+      command: /bin/tar -xzf /usr/local/waf-fle_0.6.4.tar.gz

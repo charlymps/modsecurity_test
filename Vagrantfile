@@ -17,4 +17,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
+  # Beginning of vm "waffle" configuration section
+  config.vm.define "waffle" do |server|
+    server.vm.box = "centos64"
+    server.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v6.4.2/centos64-x86_64-20140116.box"
+    server.vm.network :private_network, ip: "10.10.0.3"
+    server.vm.hostname = "waffle.charlymps.com"
+    server.vm.provision :ansible do |ansible|
+      ansible.playbook = "provision_waffle.yml"
+      # This is required because to prevent Host key checking errors when the vagrant machine is recreated with another key
+      ansible.host_key_checking = false
+    end
+  end
+
 end
