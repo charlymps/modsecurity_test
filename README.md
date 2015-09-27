@@ -37,6 +37,9 @@ Currently, the webserver installed on the machine modsecurity1 listens in IP add
 - site1.charlymps.com, which has modsecurity enabled
 - site2.charlymps.com, which has modsecurity in "DetectionOnly" mode
 
+## WAF-FLE configuration
+The 'waffle' server was installed using the deployment guide available in http://www.waf-fle.org/downloads/waf-fle_0.6.3-deployment_guide.pdf. MySQL is configured with the root password 'waffle', so you should run the installation script by opening http://10.10.0.3/waf-fle in your browser and continue the installation steps from there.
+
 ## How to test
 
 First of all I suggest to add site1.charlymps.com and site2.charlymps.com to the /etc/hosts of your local machine, it will make your testing task easier.
