@@ -9,6 +9,7 @@
         - git
         - httpd
         - mod_security
+        - mlogc
     - name: Copy apache configuration file
       copy: src=httpd.conf dest=/etc/httpd/conf/httpd.conf
     - name: Copy modsecurity configuration file
