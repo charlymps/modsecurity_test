@@ -19,7 +19,7 @@
       command: /bin/cp /usr/share/GeoIP/GeoIPASNum.dat /usr/share/GeoIP/GeoIPISP.dat creates=/usr/share/GeoIP/GeoIPISP.dat
     - name: Download waffle
       get_url: url=http://waf-fle.org/downloads/waf-fle_0.6.4.tar.gz dest=/tmp
-    - name: Uncompresses waffle
+    - name: Uncompress waffle
       command: /bin/tar -xzf /tmp/waf-fle_0.6.4.tar.gz --directory=/usr/local
     - name: Link to the app directory
       file: src=/usr/local/waf-fle_0.6.4 dest=/usr/local/waf-fle state=link

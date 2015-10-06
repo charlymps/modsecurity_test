@@ -13,9 +13,11 @@
     - name: Copy apache configuration file
       copy: src=httpd.conf dest=/etc/httpd/conf/httpd.conf
     - name: Copy modsecurity configuration file
-      copy: src=mod_security1.conf dest=/etc/httpd/conf.d/mod_security.conf
+      copy: src=mod_security2.conf dest=/etc/httpd/conf.d/mod_security.conf
     - name: Copy mlogc configuration file
-      copy: src=mlogc1.conf dest=/etc/mlogc.conf
+      copy: src=mlogc2.conf dest=/etc/mlogc.conf
+    - name: Copy cron script for mlogc
+      copy: src=push-mlogc.sh dest=/usr/local/sbin/push-mlogc.sh
     - name: Copy virtual hosts configuration
       copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
       with_items:
