@@ -1,0 +1,15 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+    - name: Import JWall repository key
+      command: /bin/rpm --import http://download.jwall.org/chris.gpg
+    - name: Copy JWall repository configuration
+      copy: src=jwall.repo dest=/etc/yum.repos.d/jwall.repo
+    - name: Install binaries
+      yum: name={{ item }} state=latest
+      with_items:
+        - vim
+        - auditconsole
+    - name: Start auditconsole service
+      service: name=auditconsole state=started

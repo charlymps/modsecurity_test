@@ -1,0 +1,7 @@
+[jwall]
+name=CentOS-jwall - jwall.org packages for noarch
+baseurl=http://download.jwall.org/yum/jwall
+enabled=1
+gpgcheck=1
+protect=1
+
