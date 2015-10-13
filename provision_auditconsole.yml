@@ -2,14 +2,25 @@
 - hosts: all
   sudo: true
   tasks:
-    - name: Import JWall repository key
-      command: /bin/rpm --import http://download.jwall.org/chris.gpg
-    - name: Copy JWall repository configuration
-      copy: src=jwall.repo dest=/etc/yum.repos.d/jwall.repo
     - name: Install binaries
       yum: name={{ item }} state=latest
       with_items:
         - vim
-        - auditconsole
-    - name: Start auditconsole service
-      service: name=auditconsole state=started
+        - java-1.6.0-openjdk
+        - tomcat6
+        - mysql-server
+        - mysql-connector-java
+        - wget
+    - name: Download AuditConsole
+      get_url: url=https://download.jwall.org/AuditConsole/current/AuditConsole-0.4.6-13.war dest=/usr/share/tomcat6/webapps/AuditConsole.war
+    - name: Create AuditConsole base directory
+      file: path=/opt/AuditConsole state=directory owner=tomcat group=tomcat mode=2770
+    - name: Start services
+      service: name={{ item }} state=started
+      with_items:
+        - tomcat6
+        - mysqld
+    - name: Initialize database and user
+      command: /usr/bin/mysql -u root -e "create database auditconsole; create user auditconsole@localhost identified by 'auditconsole'; grant all on auditconsole.* to auditconsole@localhost"
+    - name: Set mysql root password
+      command: /usr/bin/mysqladmin -u root password 'auditconsole'

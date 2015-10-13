@@ -15,7 +15,7 @@
         - php-pecl-geoip
         - GeoIP
         - wget
-    - name: Creates GeoIPISP.dat
+    - name: Create GeoIPISP.dat
       command: /bin/cp /usr/share/GeoIP/GeoIPASNum.dat /usr/share/GeoIP/GeoIPISP.dat creates=/usr/share/GeoIP/GeoIPISP.dat
     - name: Download waffle
       get_url: url=http://waf-fle.org/downloads/waf-fle_0.6.4.tar.gz dest=/tmp
@@ -32,5 +32,5 @@
       with_items:
         - httpd
         - mysqld
-    - name: Set mysql password 1
+    - name: Set mysql root password
       command: /usr/bin/mysqladmin -u root password 'waffle'
