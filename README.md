@@ -3,8 +3,13 @@
 This project deploys via Vagrant/Ansible a group of virtual machines you can use to test modsecurity and some tools to monitor its behaviour.
 
 Currently it deploys these machines:
-- modsecurity1, which is a CentOS 6 server with Apache and modsecurity installed from EPEL repositories.
-- waffle, which is a CentOS 6 server with Apache, MySQL and the WAF-FLE modsecurity console (http://waf-fle.org/)
+- modsecurity1, a CentOS 6 server with Apache and modsecurity installed from EPEL repositories. It has mlogc installed and configured to send events to waffle in pipe mode.
+- modsecurity2, a CentOS 6 server with Apache and modsecurity installed from EPEL repositories. It has mlogc installed and configured to send events to waffle in cron mode.
+- modsecurity3, a CentOS 6 server with Apache and modsecurity installed from EPEL repositories. It has mlogc2waffle installed and configured to send events to waffle in service mode.
+- modsecurity4, a CentOS 6 server with Apache and modsecurity installed from EPEL repositories. It has mlog2wafle installed and configured to send events to waffle in cron mode.
+- modsecurity5, a CentOS 6 server with Apache and modsecurity installed from EPEL repositories. It has mlogc installed and configured to send events to auditconsole in cron mode.
+- waffle, a CentOS 6 server with Apache, MySQL and the WAF-FLE modsecurity console (http://waf-fle.org/)
+- auditconsole, a CentOS 6 server with openjdk-1.6.0, tomcat6, MySQL and the AuditConsole (https://jwall.org/web/audit/console/index.jsp) installed from war file.
 
 ## About the project
 
@@ -12,7 +17,8 @@ While I have more experience with Puppet, I chose Ansible as the provisioning to
 
 ## Install
 
-I tried to do this as self contained as possible. To have this environment up and running you just need:
+I tried to make this work "out of the box" to save me time setting up my test lab. This means in most case the machines download the installers from the Internet on provisioning
+time. To have this environment up and running you just need:
 - Vagrant
 - VirtualBox
 - Ansible
@@ -32,6 +38,15 @@ vagrant up
 
 Vagrant should deploy the machines inside the private network 10.10.0.0/24, so you will use that network to reach them.
 
+This project has grown in the last weeks from 3 machines to 7. As that could take more resources than necessary on the host (maybe you only want to use 3 of the machines for
+your test) I suggest to only deploy the machines you need. Vagrant allows you to specify which machines to deploy.
+
+For example if you want to deploy only the machines 'modsecurity1' and 'modsecurity2' you will have to use this command:
+
+```
+vagrant up modsecurity1 modsecurity2
+```
+
 ## Webserver configuration
 Currently, the webserver installed on the machine modsecurity1 listens in IP address 10.10.0.2 and it has 2 Virtual Hosts:
 - site1.charlymps.com, which has modsecurity enabled
@@ -39,6 +54,10 @@ Currently, the webserver installed on the machine modsecurity1 listens in IP add
 
 ## WAF-FLE configuration
 The 'waffle' server was installed using the deployment guide available in http://www.waf-fle.org/downloads/waf-fle_0.6.3-deployment_guide.pdf. MySQL is configured with the root password 'waffle', so you should run the installation script by opening http://10.10.0.3/waf-fle in your browser and continue the installation steps from there.
+
+## AuditConsole configuration ##
+
+TODO
 
 ## How to test
 
