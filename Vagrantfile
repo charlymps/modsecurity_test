@@ -88,6 +88,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     server.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v6.4.2/centos64-x86_64-20140116.box"
     server.vm.network :private_network, ip: "10.10.0.4"
     server.vm.hostname = "auditconsole.charlymps.com"
+    server.vm.provider "virtualbox" do |vbox|
+      vbox.memory = 2048
+      vbox.cpu = 2
+    end
     server.vm.provision :ansible do |ansible|
       ansible.playbook = "provision_auditconsole.yml"
       # This is required because to prevent Host key checking errors when the vagrant machine is recreated with another key
