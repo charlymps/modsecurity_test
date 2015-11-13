@@ -57,7 +57,7 @@
     - name: Copy mlogc configuration file
       copy: src=mlogc_nginx.conf dest=/etc/mlogc.conf
     - name: Copy cron script for mlogc
-      copy: src=push-mlogc.sh dest=/usr/local/sbin/push-mlogc.sh
+      copy: src=push-mlogc.sh dest=/usr/local/sbin/push-mlogc.sh mode=0755
     - name: Clone modsecurity OWASP core rules repository
       git: repo=https://github.com/SpiderLabs/owasp-modsecurity-crs.git dest=/tmp/owasp-modsecurity-crs update=no
     - name: Configure OWASP core rules (configuration file)

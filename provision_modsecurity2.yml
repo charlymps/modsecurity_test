@@ -17,7 +17,7 @@
     - name: Copy mlogc configuration file
       copy: src=mlogc2.conf dest=/etc/mlogc.conf
     - name: Copy cron script for mlogc
-      copy: src=push-mlogc.sh dest=/usr/local/sbin/push-mlogc.sh
+      copy: src=push-mlogc.sh dest=/usr/local/sbin/push-mlogc.sh mode=0755
     - name: Copy virtual hosts configuration
       copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
       with_items:
