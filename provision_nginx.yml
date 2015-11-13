@@ -1,0 +1,68 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+    - name: Install binaries
+      yum: name={{ item }} state=latest
+      with_items:
+        - vim
+        - git
+        - wget
+        - gcc
+        - make
+        - automake
+        - autoconf
+        - libtool
+        - pcre
+        - pcre-devel
+        - libxml2
+        - libxml2-devel
+        - curl
+        - curl-devel
+        - httpd-devel
+        - openssl-devel
+        - mlogc
+    - name: Add nginx group
+      group: name=nginx
+    - name: Add nginx user
+      user: name=nginx comment="Nginx web server" shell=/sbin/nologin home=/var/lib/nginx group=nginx
+    - name: Clone modsecurity project
+      git: repo=https://github.com/SpiderLabs/ModSecurity.git dest=/root/modsecurity update=no
+    - name: Compile modsecurity step 1
+      command: ./autogen.sh chdir=/root/modsecurity
+    - name: Compile modsecurity step 2
+      command: ./configure --enable-standalone-module chdir=/root/modsecurity
+    - name: Compile modsecurity step 3
+      command: make chdir=/root/modsecurity
+    - name: Download nginx
+      get_url: url=http://nginx.org/download/nginx-1.8.0.tar.gz dest=/tmp
+    - name: Uncompress nginx
+      command: /bin/tar -xzf /tmp/nginx-1.8.0.tar.gz --directory=/root
+    - name: Compile nginx step 1
+      command: ./configure --user=nginx --group=nginx --with-pcre-jit --with-debug --with-ipv6 --with-http_ssl_module --add-module=../modsecurity/nginx/modsecurity/ chdir=/root/nginx-1.8.0
+    - name: Compile nginx step 2
+      command: make chdir=/root/nginx-1.8.0
+    - name: Compile nginx step 2
+      command: make chdir=/root/nginx-1.8.0
+    - name: Install nginx
+      command: make install chdir=/root/nginx-1.8.0
+    - name: Copy nginx configuration file
+      copy: src=nginx.conf dest=/usr/local/nginx/conf/nginx.conf
+    - name: Copy nginx init script
+      copy: src=init_nginx dest=/etc/init.d/nginx mode=0755
+    - name: Add nginx service
+      command: /sbin/chkconfig --add nginx
+    - name: Copy modsecurity configuration file
+      copy: src=mod_security_nginx.conf dest=/usr/local/nginx/conf/mod_security.conf
+    - name: Copy mlogc configuration file
+      copy: src=mlogc_nginx.conf dest=/etc/mlogc.conf
+    - name: Copy cron script for mlogc
+      copy: src=push-mlogc.sh dest=/usr/local/sbin/push-mlogc.sh
+    - name: Clone modsecurity OWASP core rules repository
+      git: repo=https://github.com/SpiderLabs/owasp-modsecurity-crs.git dest=/tmp/owasp-modsecurity-crs update=no
+    - name: Configure OWASP core rules (configuration file)
+      command: /bin/cat /tmp/owasp-modsecurity-crs/modsecurity_crs_10_setup.conf.example >> /usr/local/nginx/conf/mod_security.conf
+    - name: Configure OWASP core rules (base rules)
+      command: /bin/cat "/tmp/owasp-modsecurity-crs/base_rules/*.conf >> /usr/local/nginx/conf/mod_security.conf"
+    - name: Configure OWASP core rules (data files)
+      command: /bin/cp "/tmp/owasp-modsecurity-crs/base_rules/*.data" /usr/local/nginx/conf/
