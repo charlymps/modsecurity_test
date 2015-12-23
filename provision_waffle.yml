@@ -2,21 +2,21 @@
 - hosts: all
   sudo: true
   tasks:
+    - name: Configure epel repo
+      yum: name=http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm state=present
     - name: Install binaries
       yum: name={{ item }} state=latest
       with_items:
         - vim
         - httpd
-        - mysql-server
+        - mariadb-server
         - php
         - php-pdo
         - php-mysql
-        - php-pecl-apc
         - php-pecl-geoip
+        - php-pecl-apcu
         - GeoIP
         - wget
-    - name: Create GeoIPISP.dat
-      command: /bin/cp /usr/share/GeoIP/GeoIPASNum.dat /usr/share/GeoIP/GeoIPISP.dat creates=/usr/share/GeoIP/GeoIPISP.dat
     - name: Download waffle
       get_url: url=http://waf-fle.org/downloads/waf-fle_0.6.4.tar.gz dest=/tmp
     - name: Uncompress waffle
@@ -31,6 +31,8 @@
       service: name={{ item }} state=started
       with_items:
         - httpd
-        - mysqld
+        - mariadb
+    - name: Stop firewall
+      service: name=firewalld state=stopped
     - name: Set mysql root password
       command: /usr/bin/mysqladmin -u root password 'waffle'
