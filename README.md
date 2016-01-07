@@ -9,7 +9,7 @@ Currently it deploys these machines:
 - modsecurity4, a CentOS 6 server with Apache and modsecurity installed from EPEL repositories. It has mlog2wafle installed and configured to send events to waffle in cron mode.
 - modsecurity5, a CentOS 6 server with Apache and modsecurity installed from EPEL repositories. It has mlogc installed and configured to send events to auditconsole in cron mode.
 - nginx, a CentOS 6 server with Nginx and modsecurity built from source. It has mlogc installed and configured to send events to waffle in cron mode.
-- waffle, a CentOS 6 server with Apache, MySQL and the WAF-FLE modsecurity console (http://waf-fle.org/)
+- waffle, a CentOS 7 server with Apache, MariaDB and the WAF-FLE modsecurity console (http://waf-fle.org/)
 - auditconsole, a CentOS 6 server with openjdk-1.6.0, tomcat6, MySQL and the AuditConsole (https://jwall.org/web/audit/console/index.jsp) installed from war file.
 
 ## About the project
